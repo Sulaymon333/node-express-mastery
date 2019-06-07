@@ -1,0 +1,27 @@
+{
+    "name": "node-express-api",
+    "version": "1.0.0",
+    "description": "A node express app for CRUD operation",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "keywords": [
+        "node",
+        "express",
+        "body-parser",
+        "api"
+    ],
+    "author": "Sulaymon Tajudeen",
+    "license": "ISC",
+    "dependencies": {
+        "dotenv": "^8.0.0",
+        "ejs": "^2.6.1",
+        "express": "^4.17.1",
+        "mongodb": "^3.2.7",
+        "mongoose": "^5.5.13"
+    },
+    "devDependencies": {
+        "nodemon": "^1.19.1"
+    }
+}
