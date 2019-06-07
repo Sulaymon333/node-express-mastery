@@ -10,10 +10,14 @@ app.use(bodyParser.json()); // this is used to parse the form data into req.body
 
 // const students = require('./students');
 
+// app.get('/', (req, res) => {
+//     console.log(`the user is checking ${req.url}`);
+//     console.log(req.url);
+//     res.send('This is the index page has total of ' + students.length + ' students');
+// });
+
 app.get('/', (req, res) => {
-    console.log(`the user is checking ${req.url}`);
-    console.log(req.url);
-    res.send('This is the index page has total of ' + students.length + ' students');
+    res.sendFile(__dirname + '/views/pages/index.html');
 });
 
 app.get('/students', (req, res) => {
