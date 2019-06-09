@@ -2,11 +2,18 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 7000;
 const bodyParser = require('body-parser');
-const students = require('./students');
+const students = require('./data/students');
+
+// set the view template
+app.set('view engine', 'ejs');
+// serving static file
+app.use(express.static('public'));
+
+//body-parser middleware  to parse the form data into req.body object
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
-app.use(bodyParser.json()); // this is used to parse the form data into req.body object
+app.use(bodyParser.json());
 
 // const students = require('./students');
 
@@ -16,14 +23,63 @@ app.use(bodyParser.json()); // this is used to parse the form data into req.body
 //     res.send('This is the index page has total of ' + students.length + ' students');
 // });
 
+// home page
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/views/pages/index.html');
+    // res.sendFile(__dirname + '/views/pages/index');
+    res.render('pages/index');
 });
 
+// about page
+app.get('/about', (req, res) => {
+    res.render('pages/about');
+});
+
+// contact page
+app.get('/contacts', (req, res) => {
+    res.render('pages/contact');
+});
+app.get('/contacts', (req, res) => {
+    res.render('pages/contact');
+});
+
+// individual student page
+app.get('/students/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const student = students.filter(student => student.id === id)[0];
+    console.log(student);
+    res.render('pages/student', { student });
+});
+
+// all students page
 app.get('/students', (req, res) => {
-    console.log(`the user is checking ${req.url}`);
-    console.log('the current path is ' + req.url);
+    res.render('pages/students', { students });
+});
+
+// app.get('/students', (req, res) => {
+//     console.log(`the user is checking ${req.url}`);
+//     console.log('the current path is ' + req.url);
+//     res.json(students);
+// });
+
+// all students api
+app.get('/api/v1/students', (req, res) => {
     res.json(students);
+});
+
+// individual student api
+app.get('/api/v1/students/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    let found = false;
+    for (let student of students) {
+        if (student.id === id) {
+            res.json(student);
+            found = false;
+            return;
+        }
+    }
+    if (!found) {
+        res.send(`A student with the id: ${id} was not found`);
+    }
 });
 
 app.get('/students/:search', (req, res) => {
@@ -43,7 +99,7 @@ app.get('/students/:search', (req, res) => {
     }
 });
 
-// create - post
+// create - student
 app.post('/students', (req, res) => {
     console.log(req.body);
     const newStudent = req.body;
@@ -51,6 +107,11 @@ app.post('/students', (req, res) => {
     newStudent.id = id;
     students.push(newStudent);
     res.send('A new student has been added');
+});
+
+// add student
+app.get('/add-student', (req, res) => {
+    res.render('pages/add-student');
 });
 
 // edit
@@ -65,7 +126,6 @@ app.put('/students/:id', (req, res) => {
             student.age = age;
             student.bio = bio;
             found = true;
-            // break;
         }
     });
 
