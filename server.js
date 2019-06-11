@@ -25,6 +25,7 @@ app.use(bodyParser.json());
 
 // home page
 app.get('/', (req, res) => {
+    // console.log(__dirname); // to get the root folder of the current project
     // res.sendFile(__dirname + '/views/pages/index');
     res.render('pages/index');
 });
@@ -50,6 +51,36 @@ app.get('/students/:id', (req, res) => {
     res.render('pages/student', { student });
 });
 
+// individual student search by name/ id with error handling
+app.get('/students/:search', (req, res) => {
+    const id = parseInt(req.params.search);
+    const name = req.params.search.toLowerCase();
+
+    let found = false;
+    // for (let student of students) {
+    //     if (student.id === id || student.name.toLowerCase() === name) {
+    //         res.json(student);
+    //         console.log(student.name);
+    //         found = true;
+    //         break;
+    //     }
+    // }
+    for (let i = 0; i < students.length; i++) {
+        if (students[i].id == id || students[i].name.toLowerCase() === name) {
+            // res.json(student);
+            console.log(students[i].name);
+            res.render('pages/student', { student: students[i] });
+            found = true;
+            break;
+        }
+    }
+
+    // id or name not found
+    if (!found) {
+        res.send(id ? `student with id: "${id}" was not found` : `student with name: "${name}" name was not found`);
+    }
+});
+
 // all students page
 app.get('/students', (req, res) => {
     res.render('pages/students', { students });
@@ -67,39 +98,23 @@ app.get('/api/v1/students', (req, res) => {
 });
 
 // individual student api
-app.get('/api/v1/students/:id', (req, res) => {
-    const id = parseInt(req.params.id);
+app.get('/api/v1/students/:search', (req, res) => {
+    const id = parseInt(req.params.search);
+    const name = req.params.search.toLowerCase();
     let found = false;
     for (let student of students) {
-        if (student.id === id) {
+        if (student.id === id || student.name.toLowerCase() === name) {
             res.json(student);
             found = false;
             return;
         }
     }
     if (!found) {
-        res.send(`A student with the id: ${id} was not found`);
+        res.send(id ? `student with id: "${id}" was not found` : `student with name: "${name}" name was not found`);
     }
 });
 
-app.get('/students/:search', (req, res) => {
-    const id = parseInt(req.params.search);
-    const name = req.params.search.toLowerCase();
-
-    let found = false;
-    for (let i = 0; i < students.length; i++) {
-        if (students[i].id === id || students[i].name === name) {
-            res.json(students[i]);
-            found = true;
-            break;
-        }
-    }
-    if (!found) {
-        res.send(`A student with the id: ${id} was not found`);
-    }
-});
-
-// create - student
+// create - student using post method
 app.post('/students', (req, res) => {
     console.log(req.body);
     const newStudent = req.body;
@@ -109,7 +124,8 @@ app.post('/students', (req, res) => {
     res.send('A new student has been added');
 });
 
-// add student
+// add student - must be post method. (post method is
+// used for updating and creating data to sa server in HTML5)
 app.get('/add-student', (req, res) => {
     res.render('pages/add-student');
 });
@@ -130,7 +146,7 @@ app.put('/students/:id', (req, res) => {
     });
 
     if (!found) {
-        res.send(`A student with the id: ${id} was not found`);
+        res.send(`A student with the id: "${id}" was not found`);
     }
 });
 
@@ -143,13 +159,13 @@ app.delete('/students/:search', (req, res) => {
     for (let i = 0; i < students.length; i++) {
         if (students[i].id === id || students[i].name === name) {
             students.splice(i, 1);
-            res.send(`A student with an id ${id} has been removed`);
+            res.send(`A student with an id: "${id}" has been removed`);
             found = true;
             break;
         }
     }
     if (!found) {
-        res.send(`A student with the id: ${id} was not found`);
+        res.send(`A student with the id: "${id}" was not found`);
     }
 });
 
