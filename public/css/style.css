@@ -1,13 +1,44 @@
+*,
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
 body {
-    background: grey;
+    background: rgb(245, 241, 241);
 }
 
-img {
+/* img {
     max-width: 25%;
     min-width: 25%;
     border: 2px solid rgb(223, 214, 214);
-}
+} */
 
 a {
     text-decoration: none;
+}
+
+.section {
+    text-align: center;
+    /* margin-bottom: 70px; */
+}
+.techs {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    width: 80%;
+    height: 350px;
+    justify-content: space-between;
+}
+.icon {
+    width: 150px;
+    height: 150px;
+    padding: 15px;
+    background: rgb(226, 225, 225);
+    box-shadow: 5px 10px 5px 5px rgba(97, 97, 97, 0.431);
+}
+
+img {
+    width: 100%;
 }

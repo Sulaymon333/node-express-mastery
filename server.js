@@ -8,6 +8,7 @@ const students = require('./data/students');
 
 // set view engine as ejs
 app.set('view engine', 'ejs');
+
 // serve static files
 app.use(express.static('public'));
 
@@ -31,7 +32,7 @@ app.get('/contact', (req, res) => {
     res.render('pages/contact');
 });
 
-// GET - students page
+// GET - all students page
 app.get('/students', (req, res) => {
     res.render('pages/students', { students });
 });
