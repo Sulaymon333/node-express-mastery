@@ -4,8 +4,9 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <link rel="stylesheet" href="css/style.css" />
-        <title>Node Express API | Student</title>
+        <link rel="stylesheet" href="../sweetalert2/dist/sweetalert2.min.css">
+        <link rel="stylesheet" href="../css/style.css" />
+        <title>Node Express API | Student's Info</title>
     </head>
     <body>
         <header>
@@ -17,8 +18,36 @@
             <p><%= student.country %></p>
             <p><%= student.age %></p>
             <p><%= student.bio %></p>
-            <a href="/edit/<%=student.id%>">Edit</a>
-            <a href="/delete/<%=student.id%>" >Delete</button>
-        </div>
+            <a href="/edit-student/<%=student.id%>">Edit</a>
+            <a class="delete" onclick="deleteConfirmation()" href="javascript:void(0)">Delete</a>
+            </div>
+
+        <!-- Delete confirmation -->
+        <script src="../sweetalert2/dist/sweetalert2.all.min.js"></script>
+        <script>
+            const deleteBtn = document.querySelector('.delete')
+            function deleteConfirmation(){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                    if (result.value) {
+                        deleteBtn.setAttribute('href', '/api/v1.0/delete-student/<%=student.id%>')
+                        window.location.href = '/api/v1.0/delete-student/<%=student.id%>'
+                        Swal.fire(
+                        'Deleted!',
+                        'The student has been deleted.',
+                        'success'
+                        );
+                    }
+                })
+            }
+
+        </script>
     </body>
 </html>

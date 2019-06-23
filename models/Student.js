@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 const studentSchema = new Schema({
     name: {
         type: String,
@@ -21,7 +22,8 @@ const studentSchema = new Schema({
         min: 20
     },
     createdAt: {
-        type: Date
+        type: Date,
+        default: Date.now
     }
 });
 
